@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>最后一班谋杀列车</title>
+  <style>
+    :root {
+      --bg: #181e29;
+      --card-bg: #232c3d;
+      --text-light: #bfc9db;
+      --highlight: #ffe066;
+      --btn-red: #ff3c3c;
+      --btn-hover: #ff5e5e;
+      --border-color: #3a4660;
+      --focus: #f9db6d;
+      --shadow: 0 4px 24px #0006;
+      --card-width: 180px;
+      --card-height: 250px;
+      --side-gap: 36px;
+    }
+    html, body {
+      height: 100%;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #232c3d 60%, #181e29 100%);
+    }
+    body {
+      font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", Arial, sans-serif;
+      color: #fff;
+      line-height: 1.7;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      overflow-x: hidden;
+      background: none;
+    }
+    .container {
+      width: 100vw;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      background: rgba(35,44,61,0.98);
+      border-radius: 0;
+      box-shadow: none;
+      display: flex;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 38px;
+      margin-top: 32px;
+      background: none;
+    }
+    header h1 {
+      font-size: 2.8rem;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+      color: #ffe066;
+      text-shadow: 0 2px 12px #0008;
+    }
+    header p {
+      font-size: 1.08rem;
+      color: var(--text-light);
+      margin-bottom: 0;
+      text-shadow: 0 1px 6px #0006;
+    }
+    .main-flex {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: flex-start;
+      width: 100vw;
+      gap: var(--side-gap);
+      padding-left: 0;
+      padding-right: 0;
+      background: none;
+    }
+    .side-left {
+      flex: 0 0 auto;
+      flex-shrink: 0;
+      min-width: 220px;
+      max-width: none;
+      align-self: flex-start;
+      text-align: left;
+      margin: 10px;
+      margin-left: 5px;
+      padding-left: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      background: none;
+    }
+    .side-left .grid {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 24px;
+      justify-content: flex-start;
+      align-items: flex-start;
+      margin-bottom: 18px;
+    }
+    .side-right {
+      flex: 1 1 0;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      align-self: flex-start;
+      align-items: flex-end;
+      margin-right: 10px;
+      padding-right: 0;
+    }
+    .side-right > section, .side-right .network-table-wrap {
+      width: 95%;
+      text-align: left;
+      background: rgba(35,44,61,0.92);
+      border-radius: 12px;
+      box-shadow: 0 2px 12px #0004;
+      margin-bottom: 18px;
+      padding: 18px 18px 12px 18px;
+    }
+    h2 {
+      margin-bottom: 18px;
+      font-size: 1.22rem;
+      color: var(--focus);
+      letter-spacing: 1px;
+    }
+    .card-group-title {
+      font-size: 1.08rem;
+      color: #ffe066;
+      font-weight: 700;
+      margin: 18px 0 10px 2px;
+      letter-spacing: 1px;
+      border-left: 4px solid var(--btn-red);
+      padding-left: 10px;
+      text-shadow: 0 1px 6px #0006;
+    }
+    .card-group {
+      margin-bottom: 10px;
+    }
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin-bottom: 8px;
+      justify-content: center;
+    }
+    .card {
+      background: linear-gradient(135deg, #232c3d 80%, #232c3d 100%);
+      border-radius: 18px;
+      flex: 0 0 var(--card-width);
+      width: var(--card-width);
+      height: var(--card-height);
+      min-width: var(--card-width);
+      max-width: var(--card-width);
+      min-height: var(--card-height);
+      max-height: var(--card-height);
+      font-size: 1.08rem;
+      color: #ffe066;
+      box-shadow: 0 8px 32px #0008, 0 2px 8px #0002;
+      border: 2.5px solid var(--border-color);
+      transition: border 0.18s, box-shadow 0.18s;
+      perspective: 600px;
+      cursor: pointer;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: visible;
+      box-sizing: border-box;
+    }
+    .card::before {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 22px;
+      background: linear-gradient(90deg, var(--highlight) 0%, #fffbe6 100%);
+      border-radius: 18px 18px 0 0;
+      opacity: 0.18;
+      z-index: 1;
+    }
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s cubic-bezier(.4,2,.6,1);
+      transform-style: preserve-3d;
+      z-index: 2;
+      box-sizing: border-box;
+    }
+    .card.flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0; top: 0;
+      backface-visibility: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0 14px;
+      border-radius: 18px;
+      box-sizing: border-box;
+      word-break: break-all;
+      white-space: pre-line;
+    }
+    .card-front {
+      z-index: 2;
+      font-size: 1.08rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: #ffe066;
+      justify-content: center;
+      word-break: break-all;
+      white-space: pre-line;
+    }
+    .card-back {
+      background: #ffe066;
+      color: #232c3d;
+      border-radius: 18px;
+      transform: rotateY(180deg);
+      font-size: 0.92rem;
+      font-weight: 500;
+      box-shadow: 0 2px 8px #0002;
+      justify-content: flex-start;
+      padding-top: 14px;
+      word-break: break-all;
+      white-space: pre-line;
+    }
+    .card-back-title {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: #d18b00;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+      text-align: center;
+      width: 100%;
+      border-bottom: 1.5px dashed #e6c20044;
+      padding-bottom: 2px;
+      word-break: break-all;
+      white-space: pre-line;
+    }
+    .card-back-desc {
+      font-size: 0.86rem;
+      color: #232c3d;
+      text-align: center;
+      margin-top: 2px;
+      width: 100%;
+      word-break: break-all;
+      white-space: pre-line;
+      box-sizing: border-box;
+    }
+    .card:hover, .card:focus {
+      border-color: var(--focus);
+      box-shadow: 0 12px 36px #0008;
+      outline: none;
+    }
+    .network-table-wrap {
+      max-width: 100%;
+      overflow-x: auto;
+      overflow-y: auto;
+      background: #232c3d;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px #0002;
+      padding: 8px 0;
+      margin-bottom: 0;
+      width: 100%;
+      min-width: 220px;
+      margin-bottom: 24px;
+    }
+    .vertical-table {
+      border-collapse: separate;
+      border-spacing: 0;
+      width: 100%;
+      font-size: 0.92rem;
+      background: #232c3d;
+      border: 2px solid #888;
+    }
+    .vertical-table th, .vertical-table td {
+      min-width: 16px;
+      max-width: 24px;
+      text-align: center;
+      padding: 1px 2px;
+      text-align: left;
+      border: 1.5px solid #888;
+      background: #232c3d;
+    }
+    .vertical-table th {
+      border-top: 2px solid #888;
+      border-bottom: 2px solid #888;
+      border-left: 2px solid #888;
+      border-right: 2px solid #888;
+    }
+    .vertical-table td {
+      border-top: 1.5px solid #888;
+      border-bottom: 1.5px solid #888;
+      border-left: 1.5px solid #888;
+      border-right: 1.5px solid #888;
+      cursor: pointer;
+      transition: background 0.18s, border 0.18s;
+      text-align: center;
+      vertical-align: middle;
+    }
+    .vertical-table td:hover {
+      background: #ffe06633;
+      border-color: #ffe066;
+    }
+    .clue {
+      background: var(--highlight);
+      color: #222;
+      padding: 14px 20px;
+      border-radius: 9px;
+      margin-bottom: 12px;
+      font-size: 1.08rem;
+      box-shadow: 0 1px 6px #0002;
+      border-left: 6px solid var(--btn-red);
+      text-align: left;
+    }
+    .accusation {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 12px;
+      margin-bottom: 10px;
+      justify-content: flex-start;
+    }
+    .accusation select {
+      padding: 12px 20px;
+      border-radius: 8px;
+      border: 2px solid var(--border-color);
+      background: #232c3d;
+      color: #ffe066;
+      font-size: 1.12rem;
+      outline: none;
+      transition: border 0.2s, box-shadow 0.2s;
+    }
+    .accusation select:focus {
+      border-color: var(--focus);
+      box-shadow: 0 0 0 2px #ffe06644;
+    }
+    .btn {
+      padding: 14px 34px;
+      background: var(--btn-red);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.16rem;
+      margin-top: 12px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      box-shadow: 0 2px 8px #0002;
+      transition: background 0.18s, transform 0.15s;
+    }
+    .btn:hover {
+      background: var(--btn-hover);
+      transform: translateY(-2px) scale(1.03);
+    }
+    #modal-overlay {
+      display:none;position:fixed;z-index:9999;top:0;left:0;width:100vw;height:100vh;background:rgba(30,40,60,0.85);justify-content:center;align-items:center;
+    }
+    #modal-box {
+      background:#232c3d;color:#fff;padding:40px 32px;border-radius:20px;max-width:90vw;max-height:80vh;overflow:auto;box-shadow:0 8px 32px #0008;position:relative;
+    }
+    #modal-close {
+      position:absolute;top:16px;right:24px;font-size:28px;cursor:pointer;color:#ffe066;
+    }
+    #modal-content {
+      font-size: 1.18rem;
+      color: #ffe066;
+      line-height: 1.9;
+    }
+    .accusation-section {
+      margin: 48px auto 0 auto;
+      max-width: 800px;
+      background: rgba(35,44,61,0.98);
+      border-radius: 18px;
+      box-shadow: 0 2px 8px #0002;
+      padding: 32px 24px 24px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .vertical-header {
+      /* writing-mode: vertical-rl; */
+      text-align: center;
+      vertical-align: bottom;
+      padding: 0 4px;
+      height: auto;
+      min-width: 32px;
+      max-width: 80px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--focus);
+      letter-spacing: 0.5px;
+      background: #232c3d;
+      white-space: normal;
+      word-break: break-all;
+    }
+    .vertical-header span {
+      /* transform: none; */
+      white-space: normal;
+    }
+    @media (max-width: 1100px) {
+      .main-flex { flex-direction: column; gap: 0; }
+      .side-left, .side-right { max-width: 100%; width: 100%; }
+      .side-left { margin-bottom: 32px; }
+      .accusation-section { max-width: 98vw; }
+      .side-right { text-align: left; }
+    }
+    @media (max-width: 700px) {
+      .container { padding: 0; }
+      .card { flex: 1 1 100%; width: 90vw; min-width: 0; max-width: 100%; height: 120px; min-height: 120px; max-height: 120px; }
+      .card-front, .card-back { font-size: 0.98rem; }
+      .network-table-wrap { max-height: 180px; }
+    }
+    .side-left section {
+      margin-bottom: 24px;
+      background: rgba(35,44,61,0.92);
+      border-radius: 12px;
+      box-shadow: 0 2px 12px #0004;
+      padding: 18px 18px 12px 18px;
+    }
+    .side-right > section {
+      margin-bottom: 24px;
+    }
+    .suspect-header {
+      background: #ffe0b2 !important;
+      color: #b85c00 !important;
+    }
+    .weapon-header {
+      background: #e0d7ff !important;
+      color: #5c3cb8 !important;
+    }
+    .place-header {
+      background: #c6f1e7 !important;
+      color: #00796b !important;
+    }
+    .mark-yes {
+      color: #43a047;
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+    .mark-no {
+      color: #e53935;
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+    .disabled-cell {
+      background: #e0e0e0 !important;
+      cursor: not-allowed !important;
+    }
+    .auto-mark-no {
+  color: #888 !important;
+  font-weight: bold;
+  font-size: 1.1em;
+  background: none !important;
+  cursor: not-allowed !important;
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>No.4:《最后一班谋杀列车》</h1>
+      <p>从离岛回来后，逻辑客搭上火车。不幸的是，有人杀了列车长，火车在铁轨上疾驶，没有人知道该怎么办，但逻辑客很清楚：他必须解开这个案子。</p>
+    </header>
+    <div class="main-flex">
+      <aside class="side-left">
+        <section>
+          <h2>调查卡片</h2>
+          <div class="card-group">
+            <div class="card-group-title">嫌疑人</div>
+            <div class="grid">
+              <div class="card" tabindex="0">
+                <div class="card-inner">
+                  <div class="card-front">梅芙副总裁</div>
+                  <div class="card-back">
+                    <div class="card-back-title">梅芙副总裁</div>
+                    <div class="card-back-desc">科技未来公司的副总裁。假如她邀请你进入她的元宇宙，请有礼貌的拒绝。身高1.73米左右/右撇子/深褐色眼珠/黑发</div>
+                  </div>
+                </div>
+              </div>
+              <div class="card" tabindex="0">
+                <div class="card-inner">
+                  <div class="card-front">奥柏金大厨</div>
+                  <div class="card-back">
+                    <div class="card-back-title">奥柏金大厨</div>
+                    <div class="card-back-desc">据说她曾经谋杀亲夫，并把他的肉给煮了。身高1.57米左右/右撇子/蓝色眼珠/金发</div>
+                  </div>
+                </div>
+              </div>
+              <div class="card" tabindex="0">
+                <div class="card-inner">
+                  <div class="card-front">哲学家骨头</div>
+                  <div class="card-back">
+                    <div class="card-back-title">哲学家骨头</div>
+                    <div class="card-back-desc">黑暗但迷人的哲学家，认为他不需要为自己的行为负责，反而应该有人为此付他钱。身高1.55米左右/右撇子/浅褐色眼珠/秃头</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-group">
+            <div class="card-group-title">凶器</div>
+            <div class="grid">
+              <div class="card" tabindex="0">
+                <div class="card-inner">
+                  <div class="card-front">进口意大利刀具</div>
+                  <div class="card-back">
+                    <div class="card-back-title">进口意大利刀具</div>
+                    <div class="card-back-desc">很轻|看起来是无价之宝，实际上也是，因为它一点价值都没有。</div>
+                  </div>
+                </div>
+              </div>
+              <div class="card" tabindex="0">
+                <div class="card-inner">
+                  <div class="card-front">皮箱</div>
+                  <div class="card-back">
+                    <div class="card-back-title">皮箱</div>
+                    <div class="card-back-desc">很重|丑陋至极的行李箱。</div>
+                  </div>
+                </div>
+              </div>
+              <div class="card" tabindex="0">
+                <div class="card-inner">
+                  <div class="card-front">卷起来的报纸（包着铁撬）</div>
+                  <div class="card-back">
+                    <div class="card-back-title">卷起来的报纸（包着铁撬）</div>
+                    <div class="card-back-desc">中等重量|你以为只是一般的报纸，但是，碰！</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-group">
+            <div class="card-group-title">案发地点</div>
+            <div class="grid">
+              <div class="card" tabindex="0">
+                <div class="card-inner">
+                  <div class="card-front">火车头</div>
+                  <div class="card-back">
+                    <div class="card-back-title">火车头</div>
+                    <div class="card-back-desc">室内|蒸汽引擎震耳欲聋的声音让逻辑客无法思考。</div>
+                  </div>
+                </div>
+              </div>
+              <div class="card" tabindex="0">
+                <div class="card-inner">
+                  <div class="card-front">公务车厢</div>
+                  <div class="card-back">
+                    <div class="card-back-title">公务车厢</div>
+                    <div class="card-back-desc">室内|位于最后一节。</div>
+                  </div>
+                </div>
+              </div>
+              <div class="card" tabindex="0">
+                <div class="card-inner">
+                  <div class="card-front">屋顶</div>
+                  <div class="card-back">
+                    <div class="card-back-title">屋顶</div>
+                    <div class="card-back-desc">户外|浓烟和强风，让人很难站稳。</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </aside>
+      <aside class="side-right">
+        </br>
+        <section>
+          <h2>线索与证据</h2>
+          <div class="clue">分类广告的其中一页出现在蒸汽引擎附近。</div>
+          <div class="clue">大厨和带着皮箱的嫌疑犯有恩怨。</div>
+          <div class="clue">最高的嫌疑犯一步也没有踏进过公务车厢。</div>
+          <div class="clue">有人看见哲学家在室外晃来晃去。</div>
+          <div class="clue">列车长是被刺死的。</div>
+        </section>
+        <section>
+          <h2>推理网络</h2>
+          <div class="network-table-wrap"><div id="network-table"></div></div>
+        </section>
+      </aside>
+    </div>
+    <section class="accusation-section">
+      <h2>做出推理</h2>
+      <p>在所有的证据和线索下，做出你对凶手的指控，你只有一次机会！</p>
+      <div class="accusation">
+        <select id="suspect-select">
+          <option selected>选择嫌疑人...</option>
+          <option>梅芙副总裁</option>
+          <option>奥柏金大厨</option>
+          <option>哲学家骨头</option>
+        </select>
+        <select id="item-select">
+          <option selected>选择作案物品...</option>
+          <option>进口意大利刀具</option>
+          <option>皮箱</option>
+          <option>卷起来的报纸（包着铁撬）</option>
+        </select>
+        <select id="place-select">
+          <option selected>案发地点...</option>
+          <option>火车头</option>
+          <option>公务车厢</option>
+          <option>屋顶</option>
+        </select>
+      </div>
+      <button class="btn" id="submit-btn">真相只有一个<br>(新几子哇，一次莫黑一次多次)</button>
+    </section>
+  </div>
+  <div id="modal-overlay">
+    <div id="modal-box">
+      <span id="modal-close">×</span>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+  <script>
+    // 卡片翻转
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('click', function() {
+        this.classList.toggle('flipped');
+      });
+      card.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          this.classList.toggle('flipped');
+        }
+      });
+    });
+    // 推理网络表格竖排
+    const suspectOrder = ["\u6885\u8299\u526f\u603b\u88c1", "\u5965\u67cf\u91d1\u5927\u53a8", "\u54f2\u5b66\u5bb6\u9aa8\u5934"];
+  const weaponOrder = ["\u8fdb\u53e3\u610f\u5927\u5229\u5200\u5177", "\u76ae\u7bb1", "\u5377\u8d77\u6765\u7684\u62a5\u7eb8\uff08\u5305\u7740\u94c1\u64ac\uff09"];
+  const placeOrder = ["\u706b\u8f66\u5934", "\u516c\u52a1\u8f66\u53a2", "\u5c4b\u9876"];
+
+  const suspectKeys = suspectOrder;
+  const weaponKeys = weaponOrder;
+  const placeKeys = placeOrder;
+  const headers = suspectKeys.concat(placeKeys);
+  const rows = weaponKeys.concat(placeKeys);
+    // 构建表格HTML，表头加class
+    let html = '<table class="vertical-table"><tbody>';
+    // 横向表头
+    html += '<tr><th></th>';
+    headers.forEach(h => {
+      let cls = '';
+      if (suspectKeys.includes(h)) cls = 'suspect-header';
+      else if (placeKeys.includes(h)) cls = 'place-header';
+      html += `<th class='vertical-header ${cls}'><span>${h}</span></th>`;
+    });
+    html += '</tr>';
+    // 数据行
+    rows.forEach((r, i) => {
+      let cls = '';
+      if (weaponKeys.includes(r)) cls = 'weapon-header';
+      else if (placeKeys.includes(r)) cls = 'place-header';
+      html += `<tr><th class='${cls}'>${r}</th>`;
+      headers.forEach((h, j) => {
+        // 判断是否为同类型字段
+        let typeR = suspectKeys.includes(r) ? 'suspect' : weaponKeys.includes(r) ? 'weapon' : placeKeys.includes(r) ? 'place' : '';
+        let typeH = suspectKeys.includes(h) ? 'suspect' : weaponKeys.includes(h) ? 'weapon' : placeKeys.includes(h) ? 'place' : '';
+        if (typeR === typeH) {
+          html += `<td class='disabled-cell'></td>`;
+        } else {
+          html += `<td data-row="${i}" data-col="${j}" style="cursor:pointer;"></td>`;
+        }
+      });
+      html += '</tr>';
+    });
+    html += '</tbody></table>';
+    document.getElementById('network-table').innerHTML = html;
+    // 切换标记：空→勾→叉→空，勾联动打叉
+     const marks = ["", "✅", "❌"];
+    document.querySelectorAll('#network-table td').forEach(td => {
+      td.addEventListener('click', function() {
+        let idx = marks.indexOf(this.textContent);
+        this.textContent = marks[(idx + 1) % marks.length];
+      });
+    });
+
+    // 答案
+    const correct = {
+      suspect: "奥柏金大厨",
+      item: "进口意大利刀具",
+      place: "公务车厢"
+    };
+    const solution = `<b>【解答】</b><br>「人，是奥柏金大厨，在公务车厢，用进口意大利刀具杀死的！」<br><br><b>【后续】</b><br>大厨愤怒的起身，开口说出：「我应该把你煮来吃的，逻辑客！」此时，失去列车长好一段时间的火车终于出轨，坠入峡谷中。<br><br><b>【推理网格】</b><br>梅芙副总裁/卷起来的报纸（包着铁撬）/火车头；奥柏金大厨/进口意大利刀具/公务车厢；哲学家骨头/皮箱/屋顶`;
+    function showModal(html) {
+      document.getElementById('modal-content').innerHTML = html;
+      document.getElementById('modal-overlay').style.display = 'flex';
+    }
+    document.getElementById('modal-close').onclick = function() {
+      document.getElementById('modal-overlay').style.display = 'none';
+    };
+    document.getElementById('modal-overlay').onclick = function(e) {
+      if (e.target === this) this.style.display = 'none';
+    };
+    document.getElementById('submit-btn').addEventListener('click', function() {
+      const suspect = document.getElementById('suspect-select').value;
+      const item = document.getElementById('item-select').value;
+      const place = document.getElementById('place-select').value;
+      if (suspect.includes('选择') || item.includes('选择') || place.includes('案发地点')) {
+        showModal('<div style="font-size:18px;color:#f9db6d;">请完整选择嫌疑人、作案物品和案发地点！</div>');
+        return;
+      }
+      if (
+        suspect.trim() === correct.suspect.trim() &&
+        item.trim() === correct.item.trim() &&
+        place.trim() === correct.place.trim()
+      ) {
+        const html = `<div style='font-size:22px;color:#f9db6d;font-weight:bold;margin-bottom:12px;'>答对了！🎉</div>${solution}`;
+        showModal(html);
+      } else {
+        const html = `<div style='font-size:22px;color:#ff3c3c;font-weight:bold;margin-bottom:12px;'>答错了！</div><button id='show-answer-btn' style='margin-top:16px;padding:8px 18px;background:#f9db6d;color:#222;border:none;border-radius:6px;font-size:16px;cursor:pointer;'>点击显示正确答案与解析</button>`;
+        showModal(html);
+        setTimeout(() => {
+          const btn = document.getElementById('show-answer-btn');
+          if (btn) {
+            btn.onclick = function() {
+              const answerHtml = `<div style='margin-bottom:10px;'>正确答案：<br>嫌疑人：<b>${correct.suspect}</b><br>作案物品：<b>${correct.item}</b><br>案发地点：<b>${correct.place}</b></div>${solution}`;
+              document.getElementById('modal-content').innerHTML = `<div style='font-size:22px;color:#ff3c3c;font-weight:bold;margin-bottom:12px;'>答错了！</div>` + answerHtml;
+            };
+          }
+        }, 100);
+      }
+    });
+  </script>
+</body>
+</html>
